@@ -56,7 +56,11 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       onGenerateRoute: appRoutes.controller,
-      initialRoute: isViewed == false ? appRoutes.splash : appRoutes.login,
+      initialRoute: isViewed == false ? appRoutes.splash : appRoutes.login
+      
+      
+      
+      ,
     );
   }
 }

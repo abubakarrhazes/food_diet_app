@@ -53,13 +53,16 @@ class _RegisterState extends State<Register> {
   final TextEditingController _regionController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
-  String region = 'North';
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final AuthServices authServices = AuthServices();
+  String region = 'north';
   DateTime selectedDate = DateTime.now();
   List<String> regionSelection = [
-    'North',
-    'West',
-    'South',
-    'East',
+    'north',
+    'west',
+    'south',
+    'east',
   ];
 
   String? imagePath;
@@ -102,30 +105,23 @@ class _RegisterState extends State<Register> {
   }
   */
 
-  void _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        AuthServices().registerUser(
-          RegisterModel(
-            firstName: _firstNameController.text,
-            lastName: _lastNameController.text,
-            DOB: _dateOfBithController.text,
-            email: _emailNameController.text,
-            phoneNumber: _phoneNumberController.text,
-            region: _regionController.text,
-            password: _passwordController.text,
-            isDiabetic: _isDiabetic,
-            wantsToLoseWeight: _wantsToLoseWeight,
-          ),
-          context,
-        );
-      } catch (e) {
-        print("Failed to register: $e");
-      } finally {
-        setState(() => _isLoading = false);
-      }
-    }
+  registerUser() {
+    authServices.registerUser(
+      RegisterModel(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        dateOfBirth: _dateOfBithController.text,
+        email: _emailNameController.text,
+        phoneNumber: _phoneNumberController.text,
+        region: region,
+        password: _passwordController.text,
+        isDiabetic: _isDiabetic,
+        isTryingToLoseWeight: _wantsToLoseWeight,
+        height: _heightController.text,
+        weight: _weightController.text,
+      ),
+      context,
+    );
   }
 
   @override
@@ -253,6 +249,7 @@ class _RegisterState extends State<Register> {
                               onChanged: (String? newval) {
                                 setState(() {
                                   region = newval!;
+                                  print(" Region Selected $region");
                                 });
                               },
                             ),
@@ -261,27 +258,15 @@ class _RegisterState extends State<Register> {
                       ),
                       const SizedBox(height: 15),
                       MyInputField(
-                        hintText: 'Enter Your Height',
+                        hintText: 'Enter Your Height In Centimetres',
                         keyboardType: TextInputType.phone,
-                        controller: _phoneNumberController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return ' Required';
-                          }
-                          return null;
-                        },
+                        controller: _heightController,
                       ),
                       const SizedBox(height: 15),
                       MyInputField(
                         hintText: 'Enter Your Weight',
                         keyboardType: TextInputType.phone,
-                        controller: _phoneNumberController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return ' Required';
-                          }
-                          return null;
-                        },
+                        controller: _weightController,
                       ),
                       const SizedBox(height: 15),
                       MyInputField(
@@ -312,9 +297,27 @@ class _RegisterState extends State<Register> {
                       const SizedBox(height: 20),
                       ButtonWidget(
                         text: _isLoading
-                            ? 'Creating Please Wait...'
+                            ? 'Creating Please Wait ...'
                             : 'Create Account',
-                        onPress: _registerUser,
+                        onPress: () {
+                          if (!_isLoading &&
+                              _formKey.currentState!.validate()) {
+                            setState(() {
+                              _isLoading = true; // Set loading state to true
+                            });
+
+                            registerUser(); // Call the function to reset the password
+
+                            // You may remove the Future.delayed block if forgotUserPassword is synchronous.
+                            // This block is here to simulate an asynchronous operation.
+                            Future.delayed(Duration(seconds: 15), () {
+                              // After the simulated operation is complete, reset the loading state
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            });
+                          }
+                        },
                       ),
                       _buildLoginPrompt(),
                     ],

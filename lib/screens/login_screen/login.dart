@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void loginUser() {
+  Future<User?> loginUser() {
     return authServices.loginUser(
         LoginModel(
             email: _emailController.text, password: _passwordController.text),
@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                                     validator: (value) {
                                       RegExp emailRegExp = RegExp(
                                           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-          
+
                                       if (value == null || value.isEmpty) {
                                         return 'Email can\'t be empty';
                                       } else if (!emailRegExp.hasMatch(value)) {
@@ -139,36 +139,31 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(height: 20),
                                 ButtonWidget(
                                   onPress: () async {
-                                    if (_loginformKey.currentState!.validate()) {
+                                    if (_loginformKey.currentState!
+                                        .validate()) {
                                       setState(() {
                                         _isLoading = true;
                                       });
-                                      //User? loggedInUser = await loginUser();
+                                      User? loggedInUser = await loginUser();
                                       setState(() {
                                         _isLoading = false;
                                       });
-                                      /*
+
                                       if (loggedInUser != null) {
                                         userAdapter.user = loggedInUser;
-          
-                                        print(
-                                            'Logged in user role: ${loggedInUser.roles}');
-          
-                                        if (loggedInUser.roles == 'user') {
+
+                                        if (loggedInUser.role == 'user') {
+                                          print(
+                                              'Logged in user role: ${loggedInUser.firstName}');
+                                          Navigator.pushNamed(
+                                              context, appRoutes.home);
                                           // User is an admin, navigate to the admin dashboard
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              appRoutes.home,
-                                              (route) => false);
+                                          print('login as user');
                                         } else {
-                                          // User is a regular user, navigate to the user dashboard
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              routes.admin,
-                                              (route) => false);
+                                          Navigator.pushNamed(
+                                              context, appRoutes.forgot);
                                         }
                                       }
-                                      */
                                     }
                                   },
                                   text: 'Login',
@@ -188,8 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(top: 10, bottom: 16, left: 8, right: 8),
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 16, left: 8, right: 8),
                 child: Column(
                   children: [
                     TextButton(

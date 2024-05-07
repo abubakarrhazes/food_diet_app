@@ -6,35 +6,43 @@ import 'package:flutter/material.dart';
 class RegisterModel extends ChangeNotifier {
   final String firstName;
   final String lastName;
-  final String DOB;
   final String email;
+  final String dateOfBirth;
+  final String password;
   final String phoneNumber;
   final String region;
-  final String password;
   final bool? isDiabetic;
-  final bool? wantsToLoseWeight;
-  RegisterModel(
-      {required this.firstName,
-      required this.lastName,
-      required this.DOB,
-      required this.email,
-      required this.phoneNumber,
-      required this.password,
-      required this.isDiabetic,
-      required this.wantsToLoseWeight,
-      required this.region});
+  final bool? isTryingToLoseWeight;
+  final String? weight;
+  final String? height;
+
+  RegisterModel({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.dateOfBirth,
+    required this.password,
+    required this.phoneNumber,
+    required this.region,
+    this.isDiabetic,
+    this.isTryingToLoseWeight,
+    this.weight,
+    this.height,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'firstName': firstName,
       'lastName': lastName,
-      'DOB': DOB,
       'email': email,
+      'dateOfBirth': dateOfBirth,
+      'password': password,
       'phoneNumber': phoneNumber,
       'region': region,
-      'password': password,
       'isDiabetic': isDiabetic,
-      'wantsToLoseWeight': wantsToLoseWeight,
+      'isTryingToLoseWeight': isTryingToLoseWeight,
+      'weight': weight,
+      'height': height,
     };
   }
 
@@ -42,13 +50,17 @@ class RegisterModel extends ChangeNotifier {
     return RegisterModel(
       firstName: map['firstName'] as String,
       lastName: map['lastName'] as String,
-      DOB: map['DOB'] as String,
       email: map['email'] as String,
-      phoneNumber: map['phoneNumber'] as String,
-      region: map['state'] as String,
+      dateOfBirth: map['dateOfBirth'] as String,
       password: map['password'] as String,
-      isDiabetic: map['isDiabetic'] as bool,
-      wantsToLoseWeight: map['wantsToLoseWeight'] as bool,
+      phoneNumber: map['phoneNumber'].toString(),
+      region: map['region'] as String,
+      isDiabetic: map['isDiabetic'] != null ? map['isDiabetic'] as bool : null,
+      isTryingToLoseWeight: map['isTryingToLoseWeight'] != null
+          ? map['isTryingToLoseWeight'] as bool
+          : null,
+      weight: map['weight'] != null ? map['weight'] as String : null,
+      height: map['height'] != null ? map['height'] as String : null,
     );
   }
 
