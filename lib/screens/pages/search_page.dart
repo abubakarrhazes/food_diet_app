@@ -71,12 +71,13 @@ class _SearchPageState extends State<SearchPage> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Choose Region',
+                  'Select Region',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 10,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -84,6 +85,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 SizedBox(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DropdownButton(
                         value: region,
@@ -190,9 +192,11 @@ class _SearchPageState extends State<SearchPage> {
                 children: <Widget>[
                   Image.network(meal.image, width: 100, fit: BoxFit.cover),
                   SizedBox(height: 10),
-                  Text(meal.name,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(meal.description, overflow: TextOverflow.ellipsis),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(meal.name,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
                 ],
               ),
             ),
